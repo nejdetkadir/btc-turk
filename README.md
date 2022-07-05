@@ -27,10 +27,12 @@ Or install it yourself as:
 BtcTurk.configure do |config|
   config.logger = ::Logger.new($stdout).tap { |d| d.level = Logger::DEBUG }
   config.raw_response = false
+  config.default_limit = 100
 end
 
 BtcTurk.config.raw_response = true
 BtcTurk.config.logger = ::Logger.new($stdout).tap { |d| d.level = Logger::DEBUG }
+BtcTurk.config.default_limit = 100
 ```
 
 ## Development
