@@ -15,28 +15,34 @@ module BtcTurk
 
       private
 
-      def get_request(url, params: {}, headers: {})
-        client.connection.get(url, params, headers)
+      def get_request(url, client_type:, params: {}, headers: {})
+        client.connection(client_type).get(url, params, headers)
       end
 
-      def post_request(url, body:, headers: {})
-        client.connection.post(url, body, headers)
+      def post_request(url, client_type:, body:, headers: {})
+        client.connection(client_type).post(url, body, headers)
       end
 
-      def patch_request(url, body:, headers: {})
-        client.connection.patch(url, body, headers)
+      def patch_request(url, client_type:, body:, headers: {})
+        client.connection(client_type).patch(url, body, headers)
       end
 
-      def put_request(url, body:, headers: {})
-        client.connection.put(url, body, headers)
+      def put_request(url, client_type:, body:, headers: {})
+        client.connection(client_type).put(url, body, headers)
       end
 
-      def delete_request(url, params: {}, headers: {})
-        client.connection.delete(url, params, headers)
+      def delete_request(url, client_type:, params: {}, headers: {})
+        client.connection(client_type).delete(url, params, headers)
       end
 
       def error_response(response)
-        error = BtcTurk.raw_response ? response.body : BtcTurk::Objects::Error.new(response.body)
+        error = if BtcTurk.raw_response
+                  response.body
+                else
+                  BtcTurk::Objects::Error.new(status: response.status,
+                                              message: response.body['message'],
+                                              code: response.body['code'])
+                end
 
         Failure(error)
       end

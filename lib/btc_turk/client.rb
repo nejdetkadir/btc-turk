@@ -2,10 +2,9 @@
 
 module BtcTurk
   class Client
-    BASE_URL = 'https://api.btcturk.com'
     HEADERS = { pck: 'X-PCK', stamp: 'X-STAMP', signature: 'X-SIGNATURE' }.freeze
 
-    attr_reader :api_key, :adapter
+    attr_reader :api_key, :adapter, :stubs
 
     def initialize(api_key: nil, adapter: Faraday.default_adapter, stubs: nil)
       @api_key = api_key
@@ -13,21 +12,15 @@ module BtcTurk
       @stubs = stubs # Test stubs for requests
     end
 
-    # rubocop:disable Metrics/AbcSize
-    def connection
-      @connection ||= Faraday.new(BASE_URL) do |conn|
-        conn.request :json
-        conn.response :json, content_type: 'application/json'
-        conn.adapter adapter, @stubs
-        conn.headers[HEADERS[:pck]] = api_key
-        conn.headers[HEADERS[:stamp]] = Time.now.to_i.to_s
-        conn.headers[HEADERS[:signature]] = Digest::SHA256.hexdigest(api_key + conn.headers[HEADERS[:stamp]])
-
-        if BtcTurk.logger.present?
-          conn.response :logger, BtcTurk.logger, body: true, bodies: { request: true, response: true }
-        end
-      end
+    def public
+      BtcTurk::Resources::Public.new(self)
     end
-    # rubocop:enable Metrics/AbcSize
+
+    def connection(client_type)
+      BtcTurk::Decorators::Client::Decorator.new(client_type,
+                                                 api_key: api_key,
+                                                 adapter: adapter,
+                                                 stubs: stubs).connection
+    end
   end
 end

@@ -24,8 +24,13 @@ Metrics/MethodLength:
 
 Metrics/BlockLength:
   Exclude:
-    - 'lib/spotify_ruby/objects/**/*.rb'
+    - 'lib/btc_turk/objects/**/*.rb'
 
 Metrics/AbcSize:
+  Exclude:
+    - 'test/**/*.rb'
+    - 'lib/btc_turk/decorators/client/**/*.rb'
+
+Metrics/ClassLength:
   Exclude:
     - 'test/**/*.rb'

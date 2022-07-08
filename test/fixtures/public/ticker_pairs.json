@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "pair": "BTCUSDT",
+      "pairNormalized": "BTC_USDT",
+      "timestamp": 1657049826202,
+      "last": 20300,
+      "high": 20446,
+      "low": 19319,
+      "bid": 20278,
+      "ask": 20300,
+      "open": 19780,
+      "volume": 142.33059076,
+      "average": 19912,
+      "daily": 520,
+      "dailyPercent": 2.63,
+      "denominatorSymbol": "USDT",
+      "numeratorSymbol": "BTC",
+      "order": 2000
+    }
+  ],
+  "success": true,
+  "message": null,
+  "code": 0
+}

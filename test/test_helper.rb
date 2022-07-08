@@ -7,12 +7,15 @@ require 'minitest/autorun'
 require 'mocha/minitest'
 require 'faraday'
 require 'byebug'
+require 'dry/configurable/test_interface'
 
 module Minitest
   class Test
-    def stub_request(path:, method:, response:, body: {})
+    def stub_request(path:, method:, response:, client_type:, body: {})
+      base_url = BtcTurk::Decorators::Client::Decorator.base_url(client_type)
+
       Faraday::Adapter::Test::Stubs.new do |stub|
-        arguments = [method, "#{BtcTurk::Client::BASE_URL}/#{path}"]
+        arguments = [method, "#{base_url}/#{path}"]
         arguments << body.to_json if %i[post put patch].include?(method)
         stub.send(*arguments) { |_| response }
       end
